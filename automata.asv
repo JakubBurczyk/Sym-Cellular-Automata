@@ -10,7 +10,7 @@ classdef automata
         function obj = automata(size_x,size_y,start_population)
             obj.grid = cell_grid(size_x,size_y);
             obj.cells_ = cell_.empty(0,start_population);
-            obj.iter = 0;
+            obj.iter = 0
             
             %saving initial cell positions to 'positions' (init [0,0])  
             %every row corresponds to one location, col(1) = x, col(2) = y
@@ -22,13 +22,9 @@ classdef automata
                 
                 len = size(positions); % ROWSxCOLS of positions matrix
                 len  = len(1); %number of occupied locations
-                
-                %for every occupied location
                 for j = 1:len
-                    %if randomised location is already occupied set a flag
-                    %and redo 1 iteration (i-1) to maintain initial
-                    %starting population
                     
+                    %if location is already occupied set a fla
                     if (pos(1) == positions(j,1)) && (pos(2)== positions(j,2))
                         flag_same_pos = true;
                         i = i -1;
@@ -36,9 +32,6 @@ classdef automata
                     end
                 end
                 
-                %if location is not occupied (flag is FALSE)
-                %add location to occupied 'positions' and generate cell
-                %with given position
                 if ~flag_same_pos
                     positions(i,1) = pos(1);
                     positions(i,2) = pos(2);
@@ -46,10 +39,12 @@ classdef automata
                 end
             end
             
-            %initial grid representation
             for i = 1:length(obj.cells_)
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
+            
+            
+            
         end
         
         function obj = update(obj)

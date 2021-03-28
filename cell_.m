@@ -3,6 +3,7 @@ classdef cell_
         state
         pos
         map_size
+        age
     end
     
     methods
@@ -10,10 +11,15 @@ classdef cell_
             obj.state = 1;
             obj.map_size = size;
             obj.pos = position;
+            obj.age = 0;
         end
         
         function obj = move(obj,new_pos)
             obj.pos = new_pos;
+        end
+        
+        function obj = update(obj)
+            obj.age = obj.age + 1;
         end
         
         function obj = set_ill(obj)

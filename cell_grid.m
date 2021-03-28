@@ -13,7 +13,7 @@ classdef cell_grid
             obj.grid = zeros(obj.size);
             obj.fig = figure;
             obj.ax = axes;
-            obj.fig.WindowState = 'maximized';
+%             obj.fig.WindowState = 'maximized';
             
         end
         
@@ -35,9 +35,13 @@ classdef cell_grid
             end
         end
         
-        function draw(obj)
+        function draw(obj,iter)
             clf(obj.fig)
             hold on
+            alive = 0;
+            ill = 0;
+            recovered = 0;
+            
             for i=1:obj.size(1)
                 for j = 1:obj.size(2)
                     switch obj.grid(i,j)
@@ -46,10 +50,13 @@ classdef cell_grid
                             continue;
                         case 1
                             color = [0.4660 0.6740 0.1880];
+                            alive = alive + 1;
                         case 2
                             color = [0.6350 0.0780 0.1840];
+                            ill = ill + 1;
                         case 3
                             color = [0.3010 0.7450 0.9330];
+                            recovered = recovered + 1;
                     end
                     x = [i-0.5, i-0.5, i+0.5, i+0.5];
                     y = [j-0.5, j+0.5, j+0.5, j-0.5];
@@ -61,6 +68,8 @@ classdef cell_grid
 %             yticks([1:obj.size(2)])
             xticks([])
             yticks([])
+            
+            title(sprintf("Iter: %i     Alive: %i\nSick: %i    Recovered: %i",iter,alive,ill,recovered))
             hold off
         end
 
