@@ -1,6 +1,6 @@
 clc
 clear
-automat = automata(20,20,15);
+automat = automata(50,50,50);
 
 for i=1:100
     pause(0.0001)

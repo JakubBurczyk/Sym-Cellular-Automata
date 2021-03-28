@@ -8,10 +8,19 @@ classdef cell_
     
     methods
         function obj = cell_(size,position)
-            obj.state = 1;
+           
             obj.map_size = size;
             obj.pos = position;
             obj.age = 0;
+            
+            initial_sick_probability = 0.05;
+            
+            if rand <= initial_sick_probability
+                obj.state = 2;
+            else
+                obj.state = 1;
+            end
+            
         end
         
         function obj = move(obj,new_pos)

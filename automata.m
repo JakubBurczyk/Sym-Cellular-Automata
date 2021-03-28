@@ -15,8 +15,9 @@ classdef automata
             %saving initial cell positions to 'positions' (init [0,0])  
             %every row corresponds to one location, col(1) = x, col(2) = y
             positions = [0,0];
+            regens = 0;
             for i = 1:start_population
-                flag_same_pos = false;
+                flag_same_pos = 0;
                 pos(1) = randi([1,obj.grid.size(1)],1); %rand x
                 pos(2) = randi([1,obj.grid.size(2)],1); %rand y
                 
@@ -30,19 +31,20 @@ classdef automata
                     %starting population
                     
                     if (pos(1) == positions(j,1)) && (pos(2)== positions(j,2))
-                        flag_same_pos = true;
-                        i = i -1;
+                        flag_same_pos = 1;
+                        fprintf("Re-Gen position\n")
+                        start_population = start_population + 1;
+                        regens = regens + 1;
                         break;
                     end
                 end
-                
                 %if location is not occupied (flag is FALSE)
                 %add location to occupied 'positions' and generate cell
                 %with given position
-                if ~flag_same_pos
-                    positions(i,1) = pos(1);
-                    positions(i,2) = pos(2);
-                    obj.cells_(i) = cell_(obj.grid.size,pos);
+                if flag_same_pos == 0
+                    positions(i-regens,1) = pos(1);
+                    positions(i-regens,2) = pos(2);
+                    obj.cells_(i-regens) = cell_(obj.grid.size,pos);
                 end
             end
             
@@ -72,6 +74,11 @@ classdef automata
             % Target is chosen based on randomized direction vector
             for i=1:length(obj.cells_)
                 target = [randi([-1,1],1) ,randi([-1,1],1)];
+                
+                sick_move_probability = 0.5;
+                if (obj.cells_(i).state == 2) && (rand <= sick_move_probability)
+                    target = [0 0];
+                end
                 target_pos = obj.cells_(i).pos + target;
                 
                 if target_pos(1) > obj.grid.size(1)
@@ -87,7 +94,11 @@ classdef automata
                 end
                     
                 if obj.grid.is_empty(target_pos)
+                    obj.grid = obj.grid.set_state(obj.cells_(i).pos,0);
+                    
                     obj.cells_(i) = obj.cells_(i).move(target_pos);
+                    
+                    obj.grid = obj.grid.set_state(target_pos,1);
 %                     fprintf("Moved cell to %i %i \n",obj.cells_(i).pos(1),obj.cells_(i).pos(2))
                 end
             end
