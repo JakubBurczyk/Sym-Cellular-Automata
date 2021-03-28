@@ -3,12 +3,18 @@ classdef cell_grid
     properties
         size
         grid
+        fig
+        ax
     end
     
     methods
         function obj = cell_grid(size_x,size_y)
             obj.size = [size_x, size_y];
             obj.grid = zeros(obj.size);
+            obj.fig = figure;
+            obj.ax = axes;
+            obj.fig.WindowState = 'maximized';
+            
         end
         
         function obj = reset(obj)
@@ -30,8 +36,7 @@ classdef cell_grid
         end
         
         function draw(obj)
-            figure(1)
-            clf
+            clf(obj.fig)
             hold on
             for i=1:obj.size(1)
                 for j = 1:obj.size(2)
@@ -52,8 +57,10 @@ classdef cell_grid
                 end
             end
             axis([0.5,obj.size(1)+0.5,0.5,obj.size(2)+0.5])
-            xticks([1:obj.size(1)])
-            yticks([1:obj.size(2)])
+%             xticks([1:obj.size(1)])
+%             yticks([1:obj.size(2)])
+            xticks([])
+            yticks([])
             hold off
         end
 
