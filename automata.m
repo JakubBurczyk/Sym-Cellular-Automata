@@ -109,10 +109,12 @@ classdef automata
         function obj = cells_check_sick(obj)
             per_sick_neighbour_probability = 0.1;
             for i=1:length(obj.cells_)
-                sick_neighbours = obj.grid.check_sick_neighbours(obj.cells_(i).pos);
-                
-                if rand <= sick_neighbours * per_sick_neighbour_probability
-                    obj.cells_(i) = obj.cells_(i).set_ill();
+                if obj.cells_(i).state == 1
+                    sick_neighbours = obj.grid.check_sick_neighbours(obj.cells_(i).pos);
+
+                    if rand <= sick_neighbours * per_sick_neighbour_probability
+                        obj.cells_(i) = obj.cells_(i).set_ill();
+                    end
                 end
             end
         end
