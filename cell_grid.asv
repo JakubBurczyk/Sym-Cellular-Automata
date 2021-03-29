@@ -13,7 +13,7 @@ classdef cell_grid
             obj.grid = zeros(obj.size);
             obj.fig = figure;
             obj.ax = axes;
-            obj.fig.WindowState = 'maximized';
+%             obj.fig.WindowState = 'maximized';
             
         end
         
@@ -49,56 +49,51 @@ classdef cell_grid
             %disable targets depending on cell border pos
             %Left
             if pos(1) == 1
-                 targ(1,:) = pos;
-                 targ(2,:) = pos;
-                 targ(3,:) = pos;
+                 targ(1,:) = [];
+                 targ(2,:) = [];
+                 targ(3,:) = [];
                  %Down corner
                  if pos(2) == 1
-                    targ(5,:) = pos;
-                    targ(8,:) = pos;
+                    targ(5,:) = [];
+                    targ(8,:) = [];
                  %Up corner
                  elseif pos(2) == obj.size(2)
-                    targ(4,:) = pos;
-                    targ(6,:) = pos;
+                    targ(4,:) = [];
+                    targ(6,:) = [];
                  end
             %Right
             elseif pos(1) == obj.size(1)
-                 targ(6,:) = pos;
-                 targ(7,:) = pos;
-                 targ(8,:) = pos;
+                 targ(6,:) = [];
+                 targ(7,:) = [];
+                 targ(8,:) = [];
                  %Down corner
                  if pos(2) == 1
-                    targ(3,:) = pos;
-                    targ(5,:) = pos;
+                    targ(3,:) = [];
+                    targ(5,:) = [];
                  %Up corner
                  elseif pos(2) == obj.size(2)
-                    targ(1,:) = pos;
-                    targ(4,:) = pos;
+                    targ(14,:) = [];
+                    targ(5,:) = [];
+                    targ(8,:) = [];
                  end
             %Down
             elseif pos(2) == 1
-                 targ(3,:) = pos;
-                 targ(5,:) = pos;
-                 targ(8,:) = pos;
+                 targ(3,:) = [];
+                 targ(5,:) = [];
+                 targ(8,:) = [];
             %Up
             elseif pos(2) == obj.size(2)
-                 targ(1,:) = pos;
-                 targ(4,:) = pos;
-                 targ(6,:) = pos;
-            end
-            
-            len = size(targ);
-            len = len(2);
-            for i=1:len
-                sick = sick + obj.is_sick([targ(i,1),targ(i,2)]);
-            end
+                 targ(1,:) = [];
+                 targ(4,:) = [];
+                 targ(6,:) = [];
+            end   
         end
         
         function sick  = is_sick(obj,pos)
             if obj.grid(pos(1),pos(2)) == 2
-                sick = 1;
+                sick = true;
             else
-                sick = 0;
+                sick = false;
             end
         end
         
