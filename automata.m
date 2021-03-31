@@ -98,8 +98,7 @@ classdef automata
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
             
-            
-%             obj.grid.draw(obj.iter)
+%             obj.grid.draw_cells(obj.iter,obj.cells_)
 
             
         end

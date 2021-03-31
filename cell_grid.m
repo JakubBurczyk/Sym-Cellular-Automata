@@ -141,6 +141,44 @@ classdef cell_grid
             hold off
         end
         
+        function draw_cells(obj,iter,cells)
+            
+            clf(obj.fig)
+            hold on
+            
+            alive = 0;
+            infected = 0;
+            sick = 0;
+            recovered = 0;
+            
+            for i=1:length(cells)
+
+                p1 = cells(i).pos(1);
+                p2 = cells(i).pos(2);
+                
+                switch cells(i).state
+                    case 1
+                        color = [0.4660 0.6740 0.1880];
+                        alive = alive + 1;
+                    case 2
+                        color = [0.6350 0.0780 0.1840];
+                        infected = infected + 1;
+                    case 3
+                        color = [1 0 0];
+                        sick = sick + 1;
+                end
+                x = [p1-0.5, p1-0.5, p1+0.5, p1+0.5];
+                y = [p2-0.5, p2+0.5, p2+0.5, p2-0.5];
+                fill(x,y,color)
+            end
+ 
+            axis([0.5,obj.size(1)+0.5,0.5,obj.size(2)+0.5])
+            xticks([])
+            yticks([])
+            
+            title(sprintf("Iter: %i     Alive: %i\n Infected: %i    Sick: %i",iter,alive,infected,sick))
+            hold off
+        end
 
     end
 
