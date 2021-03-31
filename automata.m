@@ -26,9 +26,9 @@ classdef automata
         function obj = automata(size_x,size_y,start_population)
             % SETNUMERICAL PARAMS
             obj.time_to_get_sick = 15;
-            obj.probability_of_getting_sick = 0.8;
-            obj.probability_initial_infected = 0.05;
-            obj.probability_of_infecton_per_sick_neighbour = 0.1;
+            obj.probability_of_getting_sick = 0.5;
+            obj.probability_initial_infected = 0.02;
+            obj.probability_of_infecton_per_sick_neighbour = 0.25;
             obj.move_coeff_infected = 0.8;
             obj.move_coeff_sick = 0.5;
             obj.probability_of_recovery = 0;
@@ -98,7 +98,9 @@ classdef automata
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
             
-            obj.grid.draw(obj.iter)
+            
+%             obj.grid.draw(obj.iter)
+
             
         end
         
@@ -155,6 +157,26 @@ classdef automata
             end
         end
         
+        function stats = get_stats(obj)
+            alive = 0;
+            infected = 0;
+            sick = 0;
+            recovered = 0;
+            
+            for i=1:length(obj.cells_)
+                switch obj.cells_(i).state
+                    case 1
+                        alive = alive + 1;
+                    case 2
+                        infected = infected + 1;
+                    case 3
+                        sick = sick + 1;
+                end
+            end
+            
+            stats = [obj.iter, alive, infected, sick, recovered];
+            
+        end
     end
 end
 

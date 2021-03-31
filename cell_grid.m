@@ -94,11 +94,11 @@ classdef cell_grid
             end
         end
         
-        function sick  = is_infected(obj,pos)
+        function infected  = is_infected(obj,pos)
             if ((obj.grid(pos(1),pos(2)) == 2) || (obj.grid(pos(1),pos(2)) == 3))
-                sick = 1;
+                infected = 1;
             else
-                sick = 0;
+                infected = 0;
             end
         end
         
@@ -140,6 +140,7 @@ classdef cell_grid
             title(sprintf("Iter: %i     Alive: %i\n Infected: %i    Sick: %i",iter,alive,infected,sick))
             hold off
         end
+        
 
     end
 
