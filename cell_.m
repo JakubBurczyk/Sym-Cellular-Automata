@@ -7,15 +7,13 @@ classdef cell_
     end
     
     methods
-        function obj = cell_(size,position)
+        function obj = cell_(size,position,probability_initial_infected)
            
             obj.map_size = size;
             obj.pos = position;
             obj.age = 0;
             
-            initial_sick_probability = 0.05;
-            
-            if rand <= initial_sick_probability
+            if rand <= probability_initial_infected
                 obj.state = 2;
             else
                 obj.state = 1;
@@ -31,7 +29,7 @@ classdef cell_
             obj.age = obj.age + 1;
         end
         
-        function obj = set_ill(obj)
+        function obj = set_infected(obj)
             if obj.state == 1
                 obj.state = 2;
             end

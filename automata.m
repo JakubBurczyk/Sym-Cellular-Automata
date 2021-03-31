@@ -4,10 +4,30 @@ classdef automata
         grid
         cells_
         iter
+        
+        probability_initial_infected
+        
+        probability_of_infecton_per_sick_neighbour
+        
+        move_coeff_infected
+        move_coeff_sick
+        
+        probability_of_recovery
+        probability_of_sick_death
     end
     
     methods
         function obj = automata(size_x,size_y,start_population)
+
+            %NUMERICAL PARAMS
+            obj.probability_initial_infected = 0.05;
+            obj.probability_of_infecton_per_sick_neighbour = 0.1;
+            obj.move_coeff_infected = 0.8;
+            obj.move_coeff_sick = 0.5;
+            obj.probability_of_recovery = 0;
+            obj.probability_of_sick_death = 0;
+            %END NUMERICAL PARAMS
+            
             obj.grid = cell_grid(size_x,size_y);
             obj.cells_ = cell_.empty(0,start_population);
             obj.iter = 0;
@@ -32,7 +52,7 @@ classdef automata
                     
                     if (pos(1) == positions(j,1)) && (pos(2)== positions(j,2))
                         flag_same_pos = 1;
-                        fprintf("Re-Gen position\n")
+                        %fprintf("Re-Gen position\n")
                         start_population = start_population + 1;
                         regens = regens + 1;
                         break;
@@ -44,7 +64,7 @@ classdef automata
                 if flag_same_pos == 0
                     positions(i-regens,1) = pos(1);
                     positions(i-regens,2) = pos(2);
-                    obj.cells_(i-regens) = cell_(obj.grid.size,pos);
+                    obj.cells_(i-regens) = cell_(obj.grid.size,pos,obj.probability_initial_infected);
                 end
             end
             
@@ -57,7 +77,7 @@ classdef automata
         function obj = update(obj)
             obj.iter = obj.iter + 1;
             
-            obj = obj.cells_check_sick();
+            obj = obj.cells_check_infected();
             
             obj = obj.cells_move();
             
@@ -75,12 +95,18 @@ classdef automata
         function obj = cells_move(obj)
             % Target is chosen based on randomized direction vector
             for i=1:length(obj.cells_)
+                
+                
                 target = [randi([-1,1],1) ,randi([-1,1],1)];
                 
-                sick_move_probability = 0.5;
-                if (obj.cells_(i).state == 2) && (rand <= sick_move_probability)
+                if (obj.cells_(i).state == 2) && (rand <= obj.move_coeff_infected)
                     target = [0 0];
                 end
+                
+                if (obj.cells_(i).state == 3) && (rand <= obj.move_coeff_sick)
+                    target = [0 0];
+                end
+                
                 target_pos = obj.cells_(i).pos + target;
                 
                 if target_pos(1) > obj.grid.size(1)
@@ -106,14 +132,14 @@ classdef automata
             end
         end
         
-        function obj = cells_check_sick(obj)
-            per_sick_neighbour_probability = 0.1;
+        function obj = cells_check_infected(obj)
+            
             for i=1:length(obj.cells_)
                 if obj.cells_(i).state == 1
                     sick_neighbours = obj.grid.check_sick_neighbours(obj.cells_(i).pos);
 
-                    if rand <= sick_neighbours * per_sick_neighbour_probability
-                        obj.cells_(i) = obj.cells_(i).set_ill();
+                    if rand <= sick_neighbours * obj.probability_of_infecton_per_sick_neighbour
+                        obj.cells_(i) = obj.cells_(i).set_infected();
                     end
                 end
             end

@@ -106,7 +106,7 @@ classdef cell_grid
             clf(obj.fig)
             hold on
             alive = 0;
-            ill = 0;
+            infected = 0;
             recovered = 0;
             
             for i=1:obj.size(1)
@@ -120,7 +120,7 @@ classdef cell_grid
                             alive = alive + 1;
                         case 2
                             color = [0.6350 0.0780 0.1840];
-                            ill = ill + 1;
+                            infected = infected + 1;
                         case 3
                             color = [0.3010 0.7450 0.9330];
                             recovered = recovered + 1;
@@ -136,7 +136,7 @@ classdef cell_grid
             xticks([])
             yticks([])
             
-            title(sprintf("Iter: %i     Alive: %i\nSick: %i    Recovered: %i",iter,alive,ill,recovered))
+            title(sprintf("Iter: %i     Alive: %i\n Infected: %i    Recovered: %i",iter,alive,infected,recovered))
             hold off
         end
 
