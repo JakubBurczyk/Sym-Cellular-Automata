@@ -3,23 +3,19 @@ classdef cell_
         state
         pos
         map_size
-        
         age
-        
         time_infected
         time_sick
         
         time_to_get_sick
-        
-        probability_of_getting_sick
     end
     
     methods
-        function obj = cell_(size,position,probability_initial_infected,time_to_get_sick,probability_of_getting_sick)
+        function obj = cell_(size,position,probability_initial_infected,time_to_get_sick)
             obj.time_infected = 0;
             obj.time_sick = 0;
             obj.time_to_get_sick = time_to_get_sick;
-            obj.probability_of_getting_sick = probability_of_getting_sick;
+            
             obj.map_size = size;
             obj.pos = position;
             obj.age = 0;
@@ -43,9 +39,8 @@ classdef cell_
             if(obj.state == 2)
                 obj.time_infected = obj.time_infected + 1;
                 
-                if(obj.time_infected == obj.time_to_get_sick)
-                    if rand <= obj.probability_of_getting_sick
-                        obj.state = 3;
+                if(obj.time_infected >= obj.time_to_get_sick)
+                    if rand <= obj.pr
                     end
                 end
                 
@@ -53,6 +48,7 @@ classdef cell_
                 obj.time_sick = obj.time_sick + 1;
             end
             % EO TIME PASS
+
             
         end
         

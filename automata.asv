@@ -5,20 +5,21 @@ classdef automata
         cells_
         iter
         
-        % PARAMS
+        %PARAMS
+        
         time_to_get_sick
         
         probability_initial_infected
         
         probability_of_infecton_per_sick_neighbour
-        probability_of_getting_sick
+        
         move_coeff_infected
         move_coeff_sick
         
         probability_of_recovery
         probability_of_sick_death
         
-        % END PARAMS
+        %END PARAMS
     end
     
     methods
@@ -26,7 +27,6 @@ classdef automata
         function obj = automata(size_x,size_y,start_population)
             % SETNUMERICAL PARAMS
             obj.time_to_get_sick = 15;
-            obj.probability_of_getting_sick = 0.8;
             obj.probability_initial_infected = 0.05;
             obj.probability_of_infecton_per_sick_neighbour = 0.1;
             obj.move_coeff_infected = 0.8;
@@ -35,7 +35,6 @@ classdef automata
             obj.probability_of_sick_death = 0;
             % END NUMERICAL PARAMS
             
-            %INIT
             obj.grid = cell_grid(size_x,size_y);
             obj.cells_ = cell_.empty(0,start_population);
             obj.iter = 0;
@@ -72,9 +71,7 @@ classdef automata
                 if flag_same_pos == 0
                     positions(i-regens,1) = pos(1);
                     positions(i-regens,2) = pos(2);
-                    obj.cells_(i-regens) = cell_(obj.grid.size,pos,...
-                        obj.probability_initial_infected,obj.time_to_get_sick,...
-                        obj.probability_of_getting_sick);
+                    obj.cells_(i-regens) = cell_(obj.grid.size,pos,obj.probability_initial_infected);
                 end
             end
             
@@ -146,7 +143,7 @@ classdef automata
             
             for i=1:length(obj.cells_)
                 if obj.cells_(i).state == 1
-                    sick_neighbours = obj.grid.check_infected_neighbours(obj.cells_(i).pos);
+                    sick_neighbours = obj.grid.check_sick_neighbours(obj.cells_(i).pos);
 
                     if rand <= sick_neighbours * obj.probability_of_infecton_per_sick_neighbour
                         obj.cells_(i) = obj.cells_(i).set_infected();
