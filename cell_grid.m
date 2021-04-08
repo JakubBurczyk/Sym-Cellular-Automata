@@ -166,6 +166,12 @@ classdef cell_grid
                     case 3
                         color = [1 0 0];
                         sick = sick + 1;
+                    case 4
+                        color = [0 0 1];
+                        recovered = recovered + 1;
+                    case -1
+                        color = [0 0 0];
+                        
                 end
                 x = [p1-0.5, p1-0.5, p1+0.5, p1+0.5];
                 y = [p2-0.5, p2+0.5, p2+0.5, p2-0.5];
@@ -176,7 +182,7 @@ classdef cell_grid
             xticks([])
             yticks([])
             
-            title(sprintf("Iter: %i     Alive: %i\n Infected: %i    Sick: %i",iter,alive,infected,sick))
+            title(sprintf("Iter: %i\n Alive: %i    Recovered: %i\n Infected: %i    Sick: %i",iter,alive,recovered,infected,sick))
             hold off
         end
 

@@ -7,20 +7,17 @@ classdef automata
         
         % PARAMS
         time_to_get_sick
-        time_to_recover_from_infected
-        time_to_recover_from_sick
-        
-        move_coeff_infected
-        move_coeff_sick
-        
+        time_to_recover
         probability_initial_infected
         
         probability_of_infecton_per_sick_neighbour
         probability_of_getting_sick
+        move_coeff_infected
+        move_coeff_sick
+        
         probability_of_recovery
         probability_of_sick_death
-        probability_of_infected_recovery
-        probability_of_sick_recovery
+        probability_of_recovery
         % END PARAMS
     end
     
@@ -29,18 +26,13 @@ classdef automata
         function obj = automata(size_x,size_y,start_population)
             % SETNUMERICAL PARAMS
             obj.time_to_get_sick = 15;
-            obj.time_to_recover_from_infected = 15;
-            obj.time_to_recover_from_sick = 25;
             obj.probability_of_getting_sick = 0.5;
             obj.probability_initial_infected = 0.02;
             obj.probability_of_infecton_per_sick_neighbour = 0.25;
-            
             obj.move_coeff_infected = 0.8;
             obj.move_coeff_sick = 0.5;
-            
-            obj.probability_of_sick_recovery = 0.05;
-            obj.probability_of_infected_recovery = 0.1;
-            obj.probability_of_sick_death = 0.2;
+            obj.probability_of_recovery = 0;
+            obj.probability_of_sick_death = 0;
             
             % END NUMERICAL PARAMS
             
@@ -83,10 +75,7 @@ classdef automata
                     positions(i-regens,2) = pos(2);
                     obj.cells_(i-regens) = cell_(obj.grid.size,pos,...
                         obj.probability_initial_infected,obj.time_to_get_sick,...
-                        obj.time_to_recover_from_infected, obj.time_to_recover_from_sick,...
-                        obj.probability_of_getting_sick,...
-                        obj.probability_of_infected_recovery, obj.probability_of_sick_recovery,...
-                        obj.probability_of_sick_death);
+                        obj.probability_of_getting_sick);
                 end
             end
             
@@ -110,7 +99,7 @@ classdef automata
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
             
-            obj.grid.draw_cells(obj.iter,obj.cells_)
+%             obj.grid.draw_cells(obj.iter,obj.cells_)
 
             
         end
