@@ -5,6 +5,9 @@ classdef automata
         cells_
         iter
         
+        dead
+        startpop
+        
         % PARAMS
         time_to_get_sick
         time_to_recover_from_infected
@@ -42,6 +45,7 @@ classdef automata
             obj.probability_of_infected_recovery = 0.1;
             obj.probability_of_sick_death = 0.2;
             
+            obj.dead = 0;
             % END NUMERICAL PARAMS
             
             %INIT
@@ -90,6 +94,8 @@ classdef automata
                 end
             end
             
+            obj.startpop = length(obj.cells_);
+            
             %initial grid representation
             for i = 1:length(obj.cells_)
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
@@ -105,12 +111,22 @@ classdef automata
             
             obj.grid = obj.grid.reset();
             
+            cells_to_remove = [];
             for i = 1:length(obj.cells_)
                 obj.cells_(i) = obj.cells_(i).update();
+                
+                if obj.cells_(i).state == -1
+                    cells_to_remove(end+1) = i;
+                    obj.dead = obj.dead + 1;
+                end
+                
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
             
-            obj.grid.draw_cells(obj.iter,obj.cells_)
+            for i = length(cells_to_remove):-1:1
+                obj.cells_(cells_to_remove(i)) = [];
+            end
+            obj.grid.draw_cells(obj.iter,obj.cells_,obj.startpop,obj.dead)
 
             
         end
@@ -169,7 +185,7 @@ classdef automata
         end
         
         function stats = get_stats(obj)
-            alive = 0;
+            healthy = 0;
             infected = 0;
             sick = 0;
             recovered = 0;
@@ -177,7 +193,7 @@ classdef automata
             for i=1:length(obj.cells_)
                 switch obj.cells_(i).state
                     case 1
-                        alive = alive + 1;
+                        healthy = healthy + 1;
                     case 2
                         infected = infected + 1;
                     case 3
@@ -187,7 +203,7 @@ classdef automata
                 end
             end
             
-            stats = [obj.iter, alive, infected, sick, recovered];
+            stats = [obj.iter, healthy, infected, sick, recovered, obj.dead];
             
         end
     end

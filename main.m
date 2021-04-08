@@ -3,7 +3,7 @@ clear
 
 cycles = 300;
 automat = automata(20,20,200);
-stats = [0 0 0 0 0];
+stats = [0 0 0 0 0 0];
 
 fprintf("START SIM\n")
 
