@@ -22,7 +22,7 @@ classdef cell_grid
         end
         
         function obj = set_state(obj, pos, state)
-            if ismember(state,0:3)
+            if ismember(state,-1:3)
                 obj.grid(pos(1),pos(2)) = state;
             end
         end

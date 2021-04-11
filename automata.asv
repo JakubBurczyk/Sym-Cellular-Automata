@@ -4,7 +4,9 @@ classdef automata
         grid
         cells_
         iter
+        
         dead
+        startpop
         
         % PARAMS
         time_to_get_sick
@@ -23,6 +25,9 @@ classdef automata
         probability_of_infected_recovery
         probability_of_sick_recovery
         % END PARAMS
+        
+        enforced_masks
+        enforced_lockdown
     end
     
     methods
@@ -43,8 +48,11 @@ classdef automata
             obj.probability_of_infected_recovery = 0.1;
             obj.probability_of_sick_death = 0.2;
             
-            obj.dead = 0;
+            
             % END NUMERICAL PARAMS
+            obj.dead = 0;
+            enforced_masks = 0;
+            enforced_lockdown = 0;
             
             %INIT
             obj.grid = cell_grid(size_x,size_y);
@@ -92,6 +100,8 @@ classdef automata
                 end
             end
             
+            obj.startpop = length(obj.cells_);
+            
             %initial grid representation
             for i = 1:length(obj.cells_)
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
@@ -119,11 +129,10 @@ classdef automata
                 obj.grid = obj.grid.set_state(obj.cells_(i).pos,obj.cells_(i).state);
             end
             
-
             for i = length(cells_to_remove):-1:1
                 obj.cells_(cells_to_remove(i)) = [];
             end
-            obj.grid.draw_cells(obj.iter,obj.cells_,obj.dead)
+%             obj.grid.draw_cells(obj.iter,obj.cells_,obj.startpop,obj.dead)
 
             
         end
@@ -135,13 +144,21 @@ classdef automata
                 
                 target = [randi([-1,1],1) ,randi([-1,1],1)];
                 
+                %lockdown
+                if (obj.cells_(i).quarantine == 1) && (rand <= obj.move_coeff_infected)
+                    target = [0 0];
+                end
+                
+                %infected cells move a little slower
                 if (obj.cells_(i).state == 2) && (rand <= obj.move_coeff_infected)
                     target = [0 0];
                 end
                 
+                %sick cells move significantly slower
                 if (obj.cells_(i).state == 3) && (rand <= obj.move_coeff_sick)
                     target = [0 0];
                 end
+                
                 
                 target_pos = obj.cells_(i).pos + target;
                 
@@ -157,12 +174,16 @@ classdef automata
                     target_pos(2) = 1;
                 end
                     
+                
                 if obj.grid.is_empty(target_pos)
+                    %clearing old position on grid
                     obj.grid = obj.grid.set_state(obj.cells_(i).pos,0);
                     
+                    %setting cells position to a new one
                     obj.cells_(i) = obj.cells_(i).move(target_pos);
                     
-                    obj.grid = obj.grid.set_state(target_pos,1);
+                    %setting new grid position-state
+                    obj.grid = obj.grid.set_state(target_pos,obj.cells_(i).state);
 %                     fprintf("Moved cell to %i %i \n",obj.cells_(i).pos(1),obj.cells_(i).pos(2))
                 end
             end
@@ -173,15 +194,24 @@ classdef automata
             for i=1:length(obj.cells_)
                 if obj.cells_(i).state == 1
                     sick_neighbours = obj.grid.check_infected_neighbours(obj.cells_(i).pos);
-
-                    if rand <= sick_neighbours * obj.probability_of_infecton_per_sick_neighbour
+                    
+                    enforce_modifier = 1;   % modifier changing probability of getting infected
+                                            % for example wearing masks see below
+                    
+                    if obj.cells_(i).mask == 1
+                        enforce_modifier = 0.5;
+                    end
+                    
+                    if rand <= sick_neighbours * obj.probability_of_infecton_per_sick_neighbour * enforce_modifier
                         obj.cells_(i) = obj.cells_(i).set_infected();
                     end
                 end
             end
         end
         
+        
         function stats = get_stats(obj)
+            %returns a vector of statistics
             healthy = 0;
             infected = 0;
             sick = 0;
@@ -202,6 +232,38 @@ classdef automata
             
             stats = [obj.iter, healthy, infected, sick, recovered, obj.dead];
             
+        end
+        
+        % global countermeasures
+        % masks change probability modifierc in method cells_check_infected
+        function obj = enforce_masks(obj)
+            obj.enforced_masks = 1;
+            for i=1:length(obj.cells_)
+                obj.cells_(i) = obj.cells_(i).mask_on();
+                
+            end
+        end
+        
+        function obj = revoke_masks(obj)
+            obj.enforced_masks = 1;
+            for i=1:length(obj.cells_)
+                obj.cells_(i) = obj.cells_(i).mask_off();
+                
+            end
+        end
+        
+        % lockdown (global quarantine) changes movement coefficients in
+        % cells_move
+        function obj = enforce_lockdown(obj)
+            for i=1:length(obj.cells_)
+                obj.cells_(i) = obj.cells_(i).quarantine_on();
+            end
+        end
+        
+        function obj = revoke_lockdown(obj)
+            for i=1:length(obj.cells_)
+                obj.cells_(i) = obj.cells_(i).quarantine_off();
+            end
         end
     end
 end

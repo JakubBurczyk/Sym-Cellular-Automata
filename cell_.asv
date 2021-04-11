@@ -4,26 +4,26 @@ classdef cell_
                 % 2 - infected
                 % 3 - sick
                 % 4 - recovered
-                % -1 - dead, UNSTABLE TRANSITION STATE (1 iteration -> % cell removed)
-        pos % position on a map
+                % -1 - dead, mon
+        pos
         map_size
         
         age %number of iterations being alive
-        mask % masks decrease chance of infection in automata class
-        quarantine % quarantine decreased movement in automata class
+        mask %masks decrease chance of infection in automata class
+        quarantine %quarantine decreased movement in automata class
         
-        time_infected % time since infected
-        time_sick % time since sick
+        time_infected %time since infected
+        time_sick %time since sick
         
-        time_to_get_sick % min time since infection that is required to roll for getting sick
-        time_to_recover_from_infected % min time since infection that is required to roll to recover as infected
-        time_to_recover_from_sick % min time since infection that is required to roll to recover as sick
+        time_to_get_sick
+        time_to_recover_from_infected
+        time_to_recover_from_sick
         
-        probability_of_getting_sick % chance of getting sick while being infected rolled after time_to_get_sick has passed
+        probability_of_getting_sick
         
-        probability_of_sick_death % chance of dying as a sick cell
-        probability_of_infected_recovery % chance of recovery as infected
-        probability_of_sick_recovery % chance of recovery
+        probability_of_sick_death
+        probability_of_infected_recovery
+        probability_of_sick_recovery
         
         
     end
