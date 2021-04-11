@@ -2,7 +2,7 @@ clc
 clear
 
 cycles = 300;
-automat = automata(18,18,1000);
+automat = automata(50,50,1000);
 stats = [0 0 0 0 0 0];
 
 fprintf("START SIM\n")
@@ -46,6 +46,10 @@ for i=1:cycles
 %     fprintf("\bUpdate cycle %i, Elapsed: %f, F time: %f, ETA: %f \n",i,time_elapsed,time_elapsed_f,eta)
 end
 fprintf("END SIM\n")
+
+figure()
+plot(stats(:,1),stats(:,2)+stats(:,5));
+title("HEALTHY")
 
 figure()
 plot(stats(:,1),stats(:,3));
