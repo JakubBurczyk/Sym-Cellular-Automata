@@ -2,7 +2,7 @@ clc
 clear
 
 cycles = 300;
-automat = automata(50,50,1000);
+automat = automata(50,50,150);
 stats = [0 0 0 0 0 0];
 
 fprintf("START SIM\n")
