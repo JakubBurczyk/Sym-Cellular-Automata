@@ -38,7 +38,7 @@ for i=1:cycles
     time_f_end = toc();
     time_elapsed = time_f_end - time_start;
     time_elapsed_f = time_f_end - time_f_start;
-    eta = time_elapsed_f * (300-i);
+    eta = time_elapsed_f * (cycles-i);
 
 %     fprintf(repmat('\b', 1, lastsize));
 %     lastsize = fprintf("Update cycle %i, Elapsed: %f, F time: %f, ETA: %f\n",i,time_elapsed,time_elapsed_f,eta);
